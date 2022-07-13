@@ -8,20 +8,30 @@
 import UIKit
 
 class ViewController: UIViewController {
-    let randomImageEndpoint = DogAPI.Endpoint.randomDogImage.url
+    let breedList = DogAPI.Endpoint.listAllBreeds.url
     
-    let listAllEndpoint = DogAPI.Endpoint.listAllBreed.url
-
+    var breeds = [String]()
+    
+    
+    @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var ImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        DogAPI.requestRandomImage(url: randomImageEndpoint, completionHandler: self.handleRandomImageResponse(data:error:))
-     
-
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        DogAPI.listAllRequestImage(url: breedList, completionHandler: handleListAllImageResponse(breedResponse:error:))
     }
     
+    func handleListAllImageResponse(breedResponse: [String], error: Error?){
+        
+        self.breeds = breedResponse
+        DispatchQueue.main.async {
+            self.pickerView.reloadAllComponents()
+        }
+    }
+    
+   
     func handleImageFileResponse(image: UIImage?,error : Error?){
         DispatchQueue.main.async {
             self.ImageView.image = image
@@ -35,17 +45,30 @@ class ViewController: UIViewController {
         let decoder =  JSONDecoder()
         do {
         let imgData =  try decoder.decode(DogImage.self, from: data)
-            print(imgData)
-            let imgUrl = URL(string: imgData.message)!
+            let imgUrl = URL(string: (imgData.message.randomElement() ?? imgData.message.first)!)!
             DogAPI.requestImage(url:imgUrl , completionHandler: self.handleImageFileResponse(image:error:))
         }catch{
-            print("Error occured while decoding the data")
+            print("Error ##### occured while decoding the data\(error.localizedDescription)")
         }
     }
+}
+extension ViewController: UIPickerViewDelegate,UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return breeds.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return breeds[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        DogAPI.requestRandomImage(breed: breeds[row], completionHandler: self.handleRandomImageResponse(data:error:))
+    }
     
 }
-    
 
 
 

@@ -9,11 +9,25 @@ import Foundation
 import UIKit
 
 class DogAPI {
-    enum Endpoint: String {
-        case randomDogImage = "https://dog.ceo/api/breeds/image/random"
-        case listAllBreed = "https://dog.ceo/api/breeds/list/all"
+    enum Endpoint{
+        case randomDogImage
+        case randomDogBreedImage(String)
+        case listAllBreeds
         var url : URL{
-            return URL(string: self.rawValue)!
+            return URL(string: self.switchValue)!
+        }
+        var switchValue:String{
+            switch self {
+            case .randomDogImage:
+                return "https://dog.ceo/api/breeds/image/random"
+            case .randomDogBreedImage(let breed):
+                return "https://dog.ceo/api/breed/\(breed)/images"
+            case .listAllBreeds:
+                return "https://dog.ceo/api/breeds/list/all"
+
+            default:
+                break
+            }
         }
 
     }
@@ -30,8 +44,10 @@ class DogAPI {
         }.resume()
     }
     
-    class func requestRandomImage(url: URL, completionHandler:@escaping ( Data?, Error?) -> Void){
-        let task =  URLSession.shared.dataTask(with: url) { data, response, error  in
+    class func requestRandomImage(breed:String, completionHandler:@escaping ( Data?, Error?) -> Void){
+        
+        let randomImageURL =  DogAPI.Endpoint.randomDogBreedImage(breed).url
+        let task =  URLSession.shared.dataTask(with: randomImageURL) { data, response, error  in
             guard let data = data ,error == nil else {
                 print("Can't get data from the url")
                 completionHandler(nil, error)
@@ -42,5 +58,22 @@ class DogAPI {
              
         }
         task.resume()
+    }
+    
+    class func listAllRequestImage(url:URL,completionHandler: @escaping([String],Error? )->Void){
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data , error == nil else{
+                completionHandler([],error)
+                print("Error while fetching the data \(error?.localizedDescription)")
+                return
+            }
+            let decoder = JSONDecoder()
+            let breedResponse = try! decoder.decode(AllDogImage.self, from: data)
+            let breeds = breedResponse.message.keys.map({$0})
+            
+            completionHandler(breeds,nil)
+
+        }.resume()
+        
     }
 }

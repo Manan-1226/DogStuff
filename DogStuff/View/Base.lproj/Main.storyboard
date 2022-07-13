@@ -16,26 +16,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Ej-hn-s3M">
-                                <rect key="frame" x="15" y="94" width="384" height="718"/>
-                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="qdJ-1r-hIb">
+                                <rect key="frame" x="15" y="85" width="384" height="747"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxu-U1-TDe">
+                                        <rect key="frame" x="0.0" y="0.0" width="384" height="216"/>
+                                    </pickerView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Ej-hn-s3M">
+                                        <rect key="frame" x="0.0" y="216" width="384" height="531"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="531" id="v2w-hJ-63s"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="0Ej-hn-s3M" secondAttribute="bottom" constant="50" id="63s-uk-DTX"/>
-                            <constraint firstItem="0Ej-hn-s3M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="HjN-O4-DdB"/>
-                            <constraint firstItem="0Ej-hn-s3M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="TGj-x2-vcO"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0Ej-hn-s3M" secondAttribute="trailing" constant="15" id="kwA-2Y-1Ma"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qdJ-1r-hIb" secondAttribute="trailing" constant="15" id="9xQ-Hi-cfc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qdJ-1r-hIb" secondAttribute="bottom" constant="30" id="HFf-az-e26"/>
+                            <constraint firstItem="qdJ-1r-hIb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="q1X-bB-1jM"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="ImageView" destination="0Ej-hn-s3M" id="Ir2-AA-fxF"/>
+                        <outlet property="pickerView" destination="Bxu-U1-TDe" id="jlS-SC-ZHd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-643" y="133"/>
+            <point key="canvasLocation" x="-643.47826086956525" y="132.58928571428572"/>
         </scene>
     </scenes>
     <resources>
